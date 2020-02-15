@@ -1,0 +1,39 @@
+public class ComparatorImpl<T> where T : IComparable<T>
+    {
+
+        public T FindGreater(T first, T second)
+        {
+            if(first.CompareTo(second) > 0)
+            {
+                return first;
+            }
+            else
+            {
+                return second;
+            }
+            
+        }
+
+    }
+
+    public class ComparatorImp<T>
+    {
+        public T FindGreater(T first, T second)
+        {
+            ParameterExpression paramA = Expression.Parameter(typeof(T), "first"),
+             paramB = Expression.Parameter(typeof(T), "second");
+            // check greator parameter from both params
+            BinaryExpression body = Expression.GreaterThan(paramA, paramB);
+            // compile it
+            Func<T, T, bool> GreaterThan = Expression.Lambda<Func<T, T, bool>>(body, paramA, paramB).Compile();
+            // call it
+            if (GreaterThan(first, second))
+            {
+                return first;
+            }
+            else
+            {
+                return second;
+            }
+        }
+    }
