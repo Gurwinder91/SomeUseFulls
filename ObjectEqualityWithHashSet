@@ -1,0 +1,45 @@
+ public class Student
+    {
+        public string Name { get; set; }
+        public int RollNumber { get; set; }
+        public Player(String name, int rollNumber)
+        {
+            Name = name;
+            RollNumber = rollNumber;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+            var player = other as Player;
+            return player.RollNumber == this.RollNumber && player.Name == this.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = 17;
+            hash = hash * 23 + this.RollNumber.GetHashCode();
+            hash = hash * 23 + this.Name.GetHashCode();
+            return hash;
+        }
+    }
+    
+       [TestMethod]
+       public void TwoStudentsWithSameNameAndDifferentRollNumbersAreNotEqual()
+        {
+            Student dhoni = new Student("Dhoni", 7);
+            Student dhoniTwo = new Student("Dhoni", 10);
+            Assert.IsFalse(dhoni.Equals(dhoniTwo));
+        }
+
+     [TestMethod]
+        public void TwoEqualStudentsWhenAddedToAHashSetShouldAddOnlyOne()
+        {
+            var students = new HashSet<Player>();
+            students.Add(new Student("Gurwinder", 10));
+            students.Add(new Student("Gurwinder", 10));
+            Assert.AreEqual(1, students.Count);
+        }
