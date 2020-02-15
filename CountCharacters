@@ -1,0 +1,26 @@
+  public class CharacterCount
+    {
+        public static OrderedDictionary CountCharacters(string input)
+        {
+            var orderedDictionary = new OrderedDictionary();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return orderedDictionary;
+            }
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                var key = input[i].ToString();
+                if (orderedDictionary.Contains(key))
+                {
+                    orderedDictionary[key] = Convert.ToInt32(orderedDictionary[key]) + 1;
+                }
+                else
+                {
+                    orderedDictionary.Add(key, 1);
+                }
+            }
+
+            return orderedDictionary; 
+        }
+    }
