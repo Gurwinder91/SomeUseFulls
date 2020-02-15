@@ -35,3 +35,18 @@
             return stack.Count == 0;
         }
     }
+    
+    
+        [TestMethod]
+        public void ShouldValidateExpressionAsValid()
+        {
+            Assert.AreEqual(true, ExpressionValidator.Validate("{{[[(())]]}}"));
+        }
+
+        [TestMethod]
+        public void ShouldValidateExpressionAsInValid()
+        {
+            Assert.AreEqual(false, ExpressionValidator.Validate("{{[[(())]]}}("));
+            Assert.AreEqual(false, ExpressionValidator.Validate("}{"));
+        }
+        
