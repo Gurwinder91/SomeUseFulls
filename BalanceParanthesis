@@ -1,0 +1,37 @@
+ public static class ExpressionValidator
+    {
+        private static bool Match(char a, char b)
+        {
+            if (a == '{' && b == '}') return true;
+            if (a == '(' && b == ')') return true;
+            if (a == '[' && b == ']') return true;
+
+            return false;
+        }
+
+        public  static bool Validate(string expression)
+        {
+            var stack = new Stack();
+
+            for (int i = 0; i < expression.Length; i++)
+            {
+                if(expression[i] == '{' || expression[i] == '(' || expression[i] == '[')
+                {
+                    stack.Push(expression[i]);
+                }
+                if(expression[i] == '}' || expression[i] == ')' || expression[i] == ']')
+                {
+                    if (stack.Count > 0 && Match((char)stack.Peek(), expression[i]))
+                    {
+                        stack.Pop();
+                    }
+                    else
+                    {
+                        stack.Push(expression[i]);
+                    }
+                }
+              
+            }
+            return stack.Count == 0;
+        }
+    }
