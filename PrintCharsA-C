@@ -1,0 +1,15 @@
+function solution(N, K) {
+  if (N === 0) {
+    return [''];
+  }
+  var result = [];
+  solution(N - 1, K).forEach(function(p) {
+    "abc".split('').forEach(function(l) {
+      if (p.slice(-1) !== l) {
+        result.push(p.concat(l));
+      }
+    });
+  });
+  return result.slice(0, K);
+}
+console.log(solution(3, 2));
