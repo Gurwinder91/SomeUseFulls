@@ -1,0 +1,19 @@
+// By using Cadana Algorithium
+	var ans = arr[0],sum = 0;
+	for(var i = 1;i < n; ++i)	//Check if all are negative
+		ans = Math.max(ans,arr[i]);	
+	if(ans<0)					//if Max < 0 return Max
+		return ans;
+	ans = 0;
+	for(var i = 0 ;i < n; ++i)
+	{
+		if(sum + arr[i] > 0)
+			sum+=arr[i];
+		else
+			sum  = 0;
+		ans = Math.max(ans,sum);	
+	}
+	return ans;
+  
+  let array = [3, -2, 5, -1] ;
+  console.log(MaxSumSubArray(array, 4));
