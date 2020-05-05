@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+
+namespace CustomMapper
+{
+    public class Mapper<T1, T2> where T1 : class where T2 : class
+    {
+        /// <summary>
+        /// Mapping Two Objects 
+        /// </summary>
+        /// <param name="destinationObject"></param>
+        /// <returns></returns>
+        public static T1 MapObject(T2 destinationObject)
+        {
+            T1 sourceObject = Activator.CreateInstance<T1>();
+
+            IList<PropertyManager> destinationProperties = typeof(T2).GetProperties().Select((p, index) =>
+               new PropertyManager
+               {
+                   Index = index,
+                   Name = p.Name,
+                   Type = p.PropertyType.Name,
+                   Prp = p
+               })
+               .ToList();
+
+            foreach (PropertyManager p in destinationProperties)
+            {
+                PropertyInfo sourceProperties = typeof(T1).GetProperties().Where(s => s.Name == p.Name && s.PropertyType.Name == p.Type).FirstOrDefault();
+                if (sourceProperties is null)
+                {
+                    continue;
+                };
+
+                sourceProperties.SetValue(sourceObject, p.Prp.GetValue(destinationObject));
+
+            }
+            return sourceObject;
+        }
+
+        /// <summary>
+        /// Mapping Two Lists 
+        /// </summary>
+        /// <param name="destinationList"></param>
+        /// <returns></returns>
+        public static List<T1> MapArray(List<T2> destinationList)
+        {
+            List<T1> list = new List<T1>();
+
+            return MapObjectFromList(destinationList);
+
+            List<T1> MapObjectFromList(List<T2> listToMap)
+            {  // LOCAL FUNCTION TO DEAL WITH ITERATOR
+                foreach (T2 destList in listToMap)
+                {
+                    T1 managerDTO = Mapper<T1, T2>.MapObject(destList);
+                    list.Add(managerDTO);
+                }
+                return list;
+            }
+        }
+    }
+
+    public class PropertyManager
+    {
+        public int Index { get; set; }
+
+        public string Name { get; set; }
+
+        public string Type { get; set; }
+
+        public PropertyInfo Prp { get; set; }
+    }
+}
